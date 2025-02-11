@@ -1,0 +1,64 @@
+import random
+import tkinter as tk
+from tkinter import scrolledtext, messagebox
+
+# Lists of subjects, prepositions, and objects
+subjects = ["The cat", "A dog", "My friend", "The teacher", "The book", "A bird", "The car", "An apple", "The boy", "The girl"]
+prepositions = ["on", "under", "over", "beside", "between", "in", "out of", "next to", "behind", "in front of"]
+objects = ["the table", "the house", "the park", "the tree", "the river", "the school", "the door", "the window", "the road", "the chair"]
+
+# Function to generate sentences
+def generate_sentences(count=100):
+    sentences = []
+    for _ in range(count):
+        subject = random.choice(subjects)
+        preposition = random.choice(prepositions)
+        obj = random.choice(objects)
+        sentence = f"{subject} is {preposition} {obj}."
+        sentences.append(sentence)
+    return sentences
+
+# Function to display sentences in the text area
+def display_sentences():
+    text_area.delete('1.0', tk.END)  # Clear previous text
+    sentences = generate_sentences(100)
+    for idx, sentence in enumerate(sentences, 1):
+        text_area.insert(tk.END, f"{idx}. {sentence}\n")
+
+# Function to save sentences to a file
+def save_to_file():
+    sentences = text_area.get("1.0", tk.END).strip()
+    if sentences:
+        with open("Preposition_Sentences.txt", "w") as file:
+            file.write(sentences)
+        messagebox.showinfo("Success", "Sentences saved to Preposition_Sentences.txt")
+    else:
+        messagebox.showwarning("Warning", "No sentences to save!")
+
+# Create the GUI window
+root = tk.Tk()
+root.title("Preposition Sentence Generator")
+root.geometry("600x500")
+root.config(bg="#1e1e2d")
+
+# Title Label
+title_label = tk.Label(root, text="Welcome to the Preposition Sentence Generator!", 
+                       font=("Helvetica", 16, "bold"), fg="white", bg="#1e1e2d")
+title_label.pack(pady=20)
+
+# Generate Button
+generate_button = tk.Button(root, text="Generate Sentences", font=("Arial", 12, "bold"),
+                            bg="#3498db", fg="white", padx=10, pady=5, command=display_sentences)
+generate_button.pack(pady=10)
+
+# Scrollable Text Area
+text_area = scrolledtext.ScrolledText(root, width=60, height=15, font=("Arial", 12))
+text_area.pack(pady=10)
+
+# Save Button
+save_button = tk.Button(root, text="Save to File", font=("Arial", 12, "bold"),
+                        bg="#2ecc71", fg="white", padx=10, pady=5, command=save_to_file)
+save_button.pack(pady=10)
+
+# Run the GUI application
+root.mainloop()
